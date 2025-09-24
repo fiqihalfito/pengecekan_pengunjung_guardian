@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+    db:
+        image: postgres:16
+        container_name: database_guardian
+        restart: no
+        environment:
+            POSTGRES_USER: guardian
+            POSTGRES_PASSWORD: guardian
+            POSTGRES_DB: guardiandb
+        ports:
+            - "9178:5432"
+        volumes:
+            - ./database/pgdata:/var/lib/postgresql/data
+            # - ./init.sql:/docker-entrypoint-initdb.d/init.sql # optional, run initial SQL
