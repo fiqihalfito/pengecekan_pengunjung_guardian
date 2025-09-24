@@ -7,3 +7,4 @@
 
 #pgdata
 /database/pgdata
+/database/backup

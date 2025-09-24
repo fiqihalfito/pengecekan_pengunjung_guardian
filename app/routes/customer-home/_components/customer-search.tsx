@@ -20,7 +20,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { Badge } from "~/components/ui/badge"
 import { Separator } from "~/components/ui/separator"
 import type { getCustomerDataByNoHP } from "../_services/service"
-import { data, Form, useFetcher } from "react-router"
+import { data, Form, useFetcher, useNavigation } from "react-router"
 
 
 type CustomerSearchProp = {
@@ -32,11 +32,19 @@ type CustomerSearchProp = {
 export function CustomerSearch({ customerLoader, nohp }: CustomerSearchProp) {
 
 
-    let fetcher = useFetcher()
-    let busy = fetcher.state !== "idle";
+    // let fetcher = useFetcher()
+    // let busy = fetcher.state !== "idle";
+
+    const navigation = useNavigation();
+
+    const searching =
+        navigation.location &&
+        new URLSearchParams(navigation.location.search).has(
+            "nohp",
+        );
 
     // // const customerData = customerRecord?.[0]
-    const customerData = customerLoader ? customerLoader : fetcher.data?.customerRecord as Awaited<ReturnType<typeof getCustomerDataByNoHP>>
+    const customerData = customerLoader ? customerLoader : undefined
 
 
 
@@ -110,8 +118,8 @@ export function CustomerSearch({ customerLoader, nohp }: CustomerSearchProp) {
                                 />
 
                             </div>
-                            <Button type="submit" disabled={busy} className="px-8">
-                                {busy ? "Mencari..." : "Cari"}
+                            <Button type="submit" disabled={searching} className="px-8">
+                                {searching ? "Mencari..." : "Cari"}
                             </Button>
                         </div>
                     </Form>
