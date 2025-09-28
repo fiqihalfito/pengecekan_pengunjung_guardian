@@ -12,10 +12,6 @@ import {
     TrendingDown,
     Minus,
     SaladIcon,
-    SearchIcon,
-    CalendarHeartIcon,
-    FileTextIcon,
-    FileDownIcon,
 } from "lucide-react"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
@@ -23,7 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { Badge } from "~/components/ui/badge"
 import { Separator } from "~/components/ui/separator"
 import type { getCustomerDataByNoHP } from "../_services/service"
-import { Form, Link, useNavigation } from "react-router"
+import { Form, useNavigation } from "react-router"
 
 
 type CustomerSearchProp = {
@@ -48,8 +44,6 @@ export function CustomerSearch({ customerLoader, nohp }: CustomerSearchProp) {
 
     // // const customerData = customerRecord?.[0]
     const customerData = customerLoader ? customerLoader : undefined
-
-
 
 
 
@@ -102,18 +96,29 @@ export function CustomerSearch({ customerLoader, nohp }: CustomerSearchProp) {
                     <Form method="get">
                         <div className="flex gap-4">
                             <div className="flex-1">
+                                {/* <Input
+                                    type="tel"
+                                    placeholder="Masukkan nomor telepon (contoh: +62812345678)"
+                                    value={phoneNumber}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    className="text-lg"
+                                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                                /> */}
                                 <Input
                                     type="text"
                                     placeholder="Masukkan nomor telepon (contoh: 0812345678)"
                                     name="nohp"
                                     defaultValue={nohp || ""}
                                     id="nohp"
+                                    // value={phoneNumber}
+                                    // onChange={(e) => setPhoneNumber(e.target.value)}
                                     className="text-lg"
+                                // onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                                 />
 
                             </div>
-                            <Button type="submit" disabled={searching} className="px-6 cursor-pointer">
-                                {searching ? "Mencari..." : <span className="flex items-center gap-x-1.5"><SearchIcon /> Cari</span>}
+                            <Button type="submit" disabled={searching} className="px-8">
+                                {searching ? "Mencari..." : "Cari"}
                             </Button>
                         </div>
                     </Form>
@@ -161,9 +166,8 @@ export function CustomerSearch({ customerLoader, nohp }: CustomerSearchProp) {
                                         </p>
                                     </div>
                                     <div>
-                                        <label className="text-sm font-medium text-muted-foreground">Email</label>
-                                        {/* <p className="text-sm font-mono text-muted-foreground">{customerData[0].email}</p> */}
-                                        <p className="text-lg font-monox text-muted-foregroundx">{customerData[0].email}</p>
+                                        <label className="text-sm font-medium text-muted-foreground">ID Customer</label>
+                                        <p className="text-sm font-mono text-muted-foreground">{customerData[0].idCustomer}</p>
                                     </div>
                                 </div>
                             </div>
@@ -178,8 +182,7 @@ export function CustomerSearch({ customerLoader, nohp }: CustomerSearchProp) {
                                     <Activity className="h-5 w-5 text-primary" />
                                     Data Kesehatan Terakhir
                                 </div>
-                                <div className="text-sm text-muted-foreground flex items-center gap-2">
-                                    <CalendarHeartIcon className="h-5 w-5" />
+                                <div className="text-sm text-muted-foreground">
                                     {new Date(customerData[0].customerCards[0].tglKunjungan).toLocaleDateString("id-ID", {
                                         year: "numeric",
                                         month: "long",
@@ -262,20 +265,9 @@ export function CustomerSearch({ customerLoader, nohp }: CustomerSearchProp) {
                     {customerData && customerData.length > 0 && customerData[0].customerCards.length > 0 && (
                         <Card>
                             <CardHeader>
-                                <CardTitle className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <History className="h-5 w-5 text-primary" />
-                                        Riwayat Kunjungan ({customerData[0].customerCards.length} kunjungan)
-                                    </div>
-                                    <div>
-                                        <Link reloadDocument to={`/reportpdf/${customerData[0].nohp}`} >
-                                            <Button className="cursor-pointer">
-                                                <FileDownIcon />
-                                                Cetak Riwayat
-                                            </Button>
-                                        </Link>
-                                    </div>
-
+                                <CardTitle className="flex items-center gap-2">
+                                    <History className="h-5 w-5 text-primary" />
+                                    Riwayat Kunjungan ({customerData[0].customerCards.length} kunjungan)
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>

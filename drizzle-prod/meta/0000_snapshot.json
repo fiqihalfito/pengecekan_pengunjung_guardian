@@ -1,0 +1,253 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.t_cabang": {
+      "name": "t_cabang",
+      "schema": "",
+      "columns": {
+        "id_cabang": {
+          "name": "id_cabang",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nama_cabang": {
+          "name": "nama_cabang",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.t_customer_card": {
+      "name": "t_customer_card",
+      "schema": "",
+      "columns": {
+        "id_customer_card": {
+          "name": "id_customer_card",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "gula": {
+          "name": "gula",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kolesterol": {
+          "name": "kolesterol",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hb": {
+          "name": "hb",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_pegawai": {
+          "name": "id_pegawai",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_cabang": {
+          "name": "id_cabang",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_customer": {
+          "name": "id_customer",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "asam_urat": {
+          "name": "asam_urat",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tgl_kunjungan": {
+          "name": "tgl_kunjungan",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "t_customer_card_id_cabang_t_cabang_id_cabang_fk": {
+          "name": "t_customer_card_id_cabang_t_cabang_id_cabang_fk",
+          "tableFrom": "t_customer_card",
+          "tableTo": "t_cabang",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "id_cabang"
+          ],
+          "columnsTo": [
+            "id_cabang"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "t_customer_card_id_customer_t_customer_id_customer_fk": {
+          "name": "t_customer_card_id_customer_t_customer_id_customer_fk",
+          "tableFrom": "t_customer_card",
+          "tableTo": "t_customer",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "id_customer"
+          ],
+          "columnsTo": [
+            "id_customer"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "t_customer_card_id_pegawai_t_pegawai_id_pegawai_fk": {
+          "name": "t_customer_card_id_pegawai_t_pegawai_id_pegawai_fk",
+          "tableFrom": "t_customer_card",
+          "tableTo": "t_pegawai",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "id_pegawai"
+          ],
+          "columnsTo": [
+            "id_pegawai"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.t_customer": {
+      "name": "t_customer",
+      "schema": "",
+      "columns": {
+        "id_customer": {
+          "name": "id_customer",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nama": {
+          "name": "nama",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nohp": {
+          "name": "nohp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tgl_lahir": {
+          "name": "tgl_lahir",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "t_customer_nohp_unique": {
+          "columns": [
+            "nohp"
+          ],
+          "nullsNotDistinct": false,
+          "name": "t_customer_nohp_unique"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.t_pegawai": {
+      "name": "t_pegawai",
+      "schema": "",
+      "columns": {
+        "id_pegawai": {
+          "name": "id_pegawai",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nama": {
+          "name": "nama",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_cabang": {
+          "name": "id_cabang",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "t_pegawai_id_cabang_t_cabang_id_cabang_fk": {
+          "name": "t_pegawai_id_cabang_t_cabang_id_cabang_fk",
+          "tableFrom": "t_pegawai",
+          "tableTo": "t_cabang",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "id_cabang"
+          ],
+          "columnsTo": [
+            "id_cabang"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {}
+  }
+}

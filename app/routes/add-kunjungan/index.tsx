@@ -48,7 +48,7 @@ export default function AddKunjungan({ }: Route.ComponentProps) {
                             Cari dan lihat informasi lengkap customer berdasarkan nomor telepon
                         </p> */}
                     </div>
-                    <Link to={`/`}>
+                    <Link to={`/admin`}>
                         <Button className="mb-2" size={"sm"}>
                             <ChevronLeftIcon />
                             Kembali
@@ -96,7 +96,7 @@ export default function AddKunjungan({ }: Route.ComponentProps) {
                                         {data.map((c, i) => (
                                             <li key={i} className="p-4 border-2 border-primary/20 rounded-lg shadow flex justify-between items-center bg-white">
                                                 <span className="font-semibold">{c.nama}{" - "}{c.nohp}</span>
-                                                <Link to={`/addKunjungan/${c.nohp}`}>
+                                                <Link to={`/admin/addKunjungan/${c.nohp}`}>
                                                     <Button size={"sm"} className="cursor-pointer">
                                                         <CalendarArrowUpIcon />
                                                         Tambah Kunjungan

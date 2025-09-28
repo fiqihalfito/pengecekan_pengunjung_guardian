@@ -46,13 +46,13 @@ export async function action({ request, params }: Route.ActionArgs) {
         ...cleaned,
         idCustomer: customer[0].idCustomer,
         idPegawai: "c6354877-c3fe-490c-ad56-d64cd3ba8574",
-        idCabang: "0e8d8321-f497-40ab-9684-a8b59ad75f94",
+        idToko: "0e8d8321-f497-40ab-9684-a8b59ad75f94",
     }
 
     const res = await saveKunjungan(newDataKunjungan)
 
 
-    return redirect(`/?nohp=${params.nohp}`)
+    return redirect(`/admin?nohp=${params.nohp}`)
 }
 
 type FormField = 'gula' | 'kolesterol' | 'asamUrat' | 'hb'
@@ -77,7 +77,7 @@ export default function addKunjunganInsert({ params, loaderData }: Route.Compone
                             Tambahkan riwayat kunjungan customer
                         </p>
                     </div>
-                    <Link to={`/`}>
+                    <Link to={`/admin`}>
                         <Button className="mb-2" size={"sm"}>
                             <ChevronLeftIcon />
                             Kembali

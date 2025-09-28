@@ -1,7 +1,7 @@
 // seed.ts
 import { db } from "./connect";
 import {
-    tCabang,
+    tToko,
     tPegawai,
     tCustomer,
     tCustomerCard,
@@ -12,14 +12,14 @@ async function seed() {
     await db.delete(tCustomerCard);
     await db.delete(tPegawai);
     await db.delete(tCustomer);
-    await db.delete(tCabang);
+    await db.delete(tToko);
 
-    // ================== Cabang ==================
-    const cabangs = await db
-        .insert(tCabang)
+    // ================== Toko ==================
+    const tokos = await db
+        .insert(tToko)
         .values([
-            { namaCabang: "Cabang Jakarta" },
-            { namaCabang: "Cabang Bandung" },
+            { namaToko: "Toko Jakarta" },
+            { namaToko: "Toko Bandung" },
         ])
         .returning();
 
@@ -27,9 +27,9 @@ async function seed() {
     const pegawais = await db
         .insert(tPegawai)
         .values([
-            { nama: "Andi", idCabang: cabangs[0].idCabang },
-            { nama: "Budi", idCabang: cabangs[0].idCabang },
-            { nama: "Citra", idCabang: cabangs[1].idCabang },
+            { nama: "Andi", idToko: tokos[0].idToko },
+            { nama: "Budi", idToko: tokos[0].idToko },
+            { nama: "Citra", idToko: tokos[1].idToko },
         ])
         .returning();
 
@@ -47,16 +47,16 @@ async function seed() {
 
     // ================== Customer Card (10 data) ==================
     const cards: typeof tCustomerCard.$inferInsert[] = [
-        { tglKunjungan: "2025-09-01 09:00:00", gula: 120, kolesterol: 180, asamUrat: 6, hb: 14, idPegawai: pegawais[0].idPegawai, idCabang: cabangs[0].idCabang, idCustomer: customers[0].idCustomer },
-        { tglKunjungan: "2025-09-02 10:30:00", gula: 150, kolesterol: 200, asamUrat: 7, hb: 13, idPegawai: pegawais[1].idPegawai, idCabang: cabangs[0].idCabang, idCustomer: customers[1].idCustomer },
-        { tglKunjungan: "2025-09-03 11:15:00", gula: 110, kolesterol: 170, asamUrat: 5, hb: 15, idPegawai: pegawais[2].idPegawai, idCabang: cabangs[1].idCabang, idCustomer: customers[2].idCustomer },
-        { tglKunjungan: "2025-09-04 09:45:00", gula: 130, kolesterol: 190, asamUrat: 8, hb: 12, idPegawai: pegawais[0].idPegawai, idCabang: cabangs[0].idCabang, idCustomer: customers[3].idCustomer },
-        { tglKunjungan: "2025-09-05 08:50:00", gula: 140, kolesterol: 210, asamUrat: 6, hb: 16, idPegawai: pegawais[1].idPegawai, idCabang: cabangs[0].idCabang, idCustomer: customers[4].idCustomer },
-        { tglKunjungan: "2025-09-06 14:20:00", gula: 125, kolesterol: 185, asamUrat: 7, hb: 14, idPegawai: pegawais[2].idPegawai, idCabang: cabangs[1].idCabang, idCustomer: customers[0].idCustomer },
-        { tglKunjungan: "2025-09-07 15:00:00", gula: 135, kolesterol: 195, asamUrat: 5, hb: 13, idPegawai: pegawais[0].idPegawai, idCabang: cabangs[0].idCabang, idCustomer: customers[1].idCustomer },
-        { tglKunjungan: "2025-09-08 16:40:00", gula: 145, kolesterol: 205, asamUrat: 9, hb: 12, idPegawai: pegawais[1].idPegawai, idCabang: cabangs[0].idCabang, idCustomer: customers[2].idCustomer },
-        { tglKunjungan: "2025-09-09 10:10:00", gula: 155, kolesterol: 215, asamUrat: 6, hb: 15, idPegawai: pegawais[2].idPegawai, idCabang: cabangs[1].idCabang, idCustomer: customers[3].idCustomer },
-        { tglKunjungan: "2025-09-10 09:30:00", gula: 160, kolesterol: 220, asamUrat: 8, hb: 14, idPegawai: pegawais[0].idPegawai, idCabang: cabangs[0].idCabang, idCustomer: customers[4].idCustomer },
+        { tglKunjungan: "2025-09-01 09:00:00", gula: 120, kolesterol: 180, asamUrat: 6, hb: 14, idPegawai: pegawais[0].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[0].idCustomer },
+        { tglKunjungan: "2025-09-02 10:30:00", gula: 150, kolesterol: 200, asamUrat: 7, hb: 13, idPegawai: pegawais[1].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[1].idCustomer },
+        { tglKunjungan: "2025-09-03 11:15:00", gula: 110, kolesterol: 170, asamUrat: 5, hb: 15, idPegawai: pegawais[2].idPegawai, idToko: tokos[1].idToko, idCustomer: customers[2].idCustomer },
+        { tglKunjungan: "2025-09-04 09:45:00", gula: 130, kolesterol: 190, asamUrat: 8, hb: 12, idPegawai: pegawais[0].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[3].idCustomer },
+        { tglKunjungan: "2025-09-05 08:50:00", gula: 140, kolesterol: 210, asamUrat: 6, hb: 16, idPegawai: pegawais[1].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[4].idCustomer },
+        { tglKunjungan: "2025-09-06 14:20:00", gula: 125, kolesterol: 185, asamUrat: 7, hb: 14, idPegawai: pegawais[2].idPegawai, idToko: tokos[1].idToko, idCustomer: customers[0].idCustomer },
+        { tglKunjungan: "2025-09-07 15:00:00", gula: 135, kolesterol: 195, asamUrat: 5, hb: 13, idPegawai: pegawais[0].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[1].idCustomer },
+        { tglKunjungan: "2025-09-08 16:40:00", gula: 145, kolesterol: 205, asamUrat: 9, hb: 12, idPegawai: pegawais[1].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[2].idCustomer },
+        { tglKunjungan: "2025-09-09 10:10:00", gula: 155, kolesterol: 215, asamUrat: 6, hb: 15, idPegawai: pegawais[2].idPegawai, idToko: tokos[1].idToko, idCustomer: customers[3].idCustomer },
+        { tglKunjungan: "2025-09-10 09:30:00", gula: 160, kolesterol: 220, asamUrat: 8, hb: 14, idPegawai: pegawais[0].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[4].idCustomer },
     ];
 
     await db.insert(tCustomerCard).values(cards);

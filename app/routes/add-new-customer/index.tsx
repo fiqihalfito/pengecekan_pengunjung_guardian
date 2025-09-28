@@ -59,7 +59,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     const customer = await saveCustomer(newCustomer)
 
 
-    return redirect(`/addKunjungan/${customer[0].nohp}`)
+    return redirect(`/admin/addKunjungan/${customer[0].nohp}`)
 }
 
 type FormField = 'nama' | 'nohp'
@@ -83,7 +83,7 @@ export default function addNewCustomer({ params, loaderData }: Route.ComponentPr
                             Tambahkan riwayat kunjungan customer
                         </p>
                     </div>
-                    <Link to={`/`}>
+                    <Link to={`/admin`}>
                         <Button className="mb-2" size={"sm"}>
                             <ChevronLeftIcon />
                             Kembali

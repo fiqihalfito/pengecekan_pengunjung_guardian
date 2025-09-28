@@ -1,18 +1,18 @@
 import { pgTable, uuid, text, date, integer, timestamp, real } from "drizzle-orm/pg-core";
 
-// ================== Cabang ==================
-export const tCabang = pgTable("t_cabang", {
-    idCabang: uuid("id_cabang").defaultRandom().primaryKey(),
-    namaCabang: text("nama_cabang").notNull(),
+// ================== Toko ==================
+export const tToko = pgTable("t_toko", {
+    idToko: uuid("id_toko").defaultRandom().primaryKey(),
+    namaToko: text("nama_toko").notNull(),
 });
 
 // ================== Pegawai ==================
 export const tPegawai = pgTable("t_pegawai", {
     idPegawai: uuid("id_pegawai").defaultRandom().primaryKey(),
     nama: text("nama").notNull(),
-    idCabang: uuid("id_cabang")
+    idToko: uuid("id_toko")
         .notNull()
-        .references(() => tCabang.idCabang, { onDelete: "cascade" }),
+        .references(() => tToko.idToko, { onDelete: "cascade" }),
 });
 
 // ================== Customer ==================
@@ -21,6 +21,7 @@ export const tCustomer = pgTable("t_customer", {
     nama: text("nama").notNull(),
     nohp: text("nohp").notNull().unique(),
     tglLahir: date("tgl_lahir", { mode: "string" }),
+    email: text("email").default("contoh_email@gmail.com")
 });
 
 // ================== Customer Card ==================
@@ -34,9 +35,9 @@ export const tCustomerCard = pgTable("t_customer_card", {
     idPegawai: uuid("id_pegawai")
         .notNull()
         .references(() => tPegawai.idPegawai, { onDelete: "cascade" }),
-    idCabang: uuid("id_cabang")
+    idToko: uuid("id_toko")
         .notNull()
-        .references(() => tCabang.idCabang, { onDelete: "cascade" }),
+        .references(() => tToko.idToko, { onDelete: "cascade" }),
     idCustomer: uuid("id_customer")
         .notNull()
         .references(() => tCustomer.idCustomer, { onDelete: "cascade" }),

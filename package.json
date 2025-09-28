@@ -8,7 +8,12 @@
         "start": "react-router-serve ./build/server/index.js",
         "typecheck": "react-router typegen && tsc",
         "db:push": "npx drizzle-kit push",
-        "db:seed": "npx tsx ./database/seed.ts"
+        "db:seed": "npx tsx ./database/seed.ts",
+        "db:backup": "podman exec -t database_guardian pg_dump -U guardian -d guardiandb -f /opt/backup/backup.sql",
+        "db:generate:dev": "npx drizzle-kit generate",
+        "db:generate:prod": "npx drizzle-kit generate --config=drizzle-prod.config.ts",
+        "db:migrate:prod": "npx drizzle-kit migrate --config=drizzle-prod.config.ts",
+        "db:pull:prod": "npx drizzle-kit pull --config=drizzle-prod.config.ts"
     },
     "dependencies": {
         "@radix-ui/react-label": "^2.1.7",
@@ -23,6 +28,7 @@
         "drizzle-zod": "^0.8.3",
         "isbot": "^5.1.27",
         "lucide-react": "^0.544.0",
+        "pdf-lib": "^1.17.1",
         "pg": "^8.16.3",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
