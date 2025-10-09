@@ -252,8 +252,8 @@ export function CustomerSearch({ customerLoader, nohp }: CustomerSearchProp) {
                                     <p className="text-lg font-semibold">{customerData[0].customerCards[0].pegawai.nama}</p>
                                 </div>
                                 <div>
-                                    <label className="text-sm font-medium text-muted-foreground">Toko</label>
-                                    <p className="text-lg">{customerData[0].customerCards[0].toko.namaToko}</p>
+                                    <label className="text-sm font-medium text-muted-foreground">Kode Toko</label>
+                                    <p className="text-lg font-medium">{customerData[0].customerCards[0].toko.kodeToko}</p>
                                 </div>
                             </div>
                         </CardContent>
@@ -306,7 +306,7 @@ export function CustomerSearch({ customerLoader, nohp }: CustomerSearchProp) {
 
                                                     </div>
                                                     <div className="text-sm text-muted-foreground">
-                                                        {cc.pegawai.nama} • {cc.toko.namaToko}
+                                                        {cc.pegawai.nama} • kode toko : {cc.toko.kodeToko}
                                                     </div>
                                                 </div>
 

@@ -4,6 +4,7 @@ import { pgTable, uuid, text, date, integer, timestamp, real } from "drizzle-orm
 export const tToko = pgTable("t_toko", {
     idToko: uuid("id_toko").defaultRandom().primaryKey(),
     namaToko: text("nama_toko").notNull(),
+    kodeToko: text("kode_toko")
 });
 
 // ================== Pegawai ==================

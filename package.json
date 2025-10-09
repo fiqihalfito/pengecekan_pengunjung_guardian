@@ -11,6 +11,7 @@
         "db:seed": "npx tsx ./database/seed.ts",
         "db:backup": "podman exec -t database_guardian pg_dump -U guardian -d guardiandb -f /opt/backup/backup.sql",
         "db:generate:dev": "npx drizzle-kit generate",
+        "db:push:dev": "npx drizzle-kit push",
         "db:generate:prod": "npx drizzle-kit generate --config=drizzle-prod.config.ts",
         "db:migrate:prod": "npx drizzle-kit migrate --config=drizzle-prod.config.ts",
         "db:pull:prod": "npx drizzle-kit pull --config=drizzle-prod.config.ts"
