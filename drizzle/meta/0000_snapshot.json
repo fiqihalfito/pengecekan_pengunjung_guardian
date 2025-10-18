@@ -4,28 +4,55 @@
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.t_cabang": {
-      "name": "t_cabang",
+    "public.t_customer": {
+      "name": "t_customer",
       "schema": "",
       "columns": {
-        "id_cabang": {
-          "name": "id_cabang",
+        "id_customer": {
+          "name": "id_customer",
           "type": "uuid",
           "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "nama_cabang": {
-          "name": "nama_cabang",
+        "nama": {
+          "name": "nama",
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "nohp": {
+          "name": "nohp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tgl_lahir": {
+          "name": "tgl_lahir",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'contoh_email@gmail.com'"
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "t_customer_nohp_unique": {
+          "columns": [
+            "nohp"
+          ],
+          "nullsNotDistinct": false,
+          "name": "t_customer_nohp_unique"
+        }
+      },
       "checkConstraints": {},
       "policies": {},
       "isRLSEnabled": false
@@ -65,8 +92,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "id_cabang": {
-          "name": "id_cabang",
+        "id_toko": {
+          "name": "id_toko",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -93,20 +120,6 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "t_customer_card_id_cabang_t_cabang_id_cabang_fk": {
-          "name": "t_customer_card_id_cabang_t_cabang_id_cabang_fk",
-          "tableFrom": "t_customer_card",
-          "tableTo": "t_cabang",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "id_cabang"
-          ],
-          "columnsTo": [
-            "id_cabang"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
         "t_customer_card_id_customer_t_customer_id_customer_fk": {
           "name": "t_customer_card_id_customer_t_customer_id_customer_fk",
           "tableFrom": "t_customer_card",
@@ -134,56 +147,24 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
+        },
+        "t_customer_card_id_toko_t_toko_id_toko_fk": {
+          "name": "t_customer_card_id_toko_t_toko_id_toko_fk",
+          "tableFrom": "t_customer_card",
+          "tableTo": "t_toko",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "id_toko"
+          ],
+          "columnsTo": [
+            "id_toko"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {},
-      "policies": {},
-      "isRLSEnabled": false
-    },
-    "public.t_customer": {
-      "name": "t_customer",
-      "schema": "",
-      "columns": {
-        "id_customer": {
-          "name": "id_customer",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "nama": {
-          "name": "nama",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "nohp": {
-          "name": "nohp",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "tgl_lahir": {
-          "name": "tgl_lahir",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "t_customer_nohp_unique": {
-          "columns": [
-            "nohp"
-          ],
-          "nullsNotDistinct": false,
-          "name": "t_customer_nohp_unique"
-        }
-      },
       "checkConstraints": {},
       "policies": {},
       "isRLSEnabled": false
@@ -205,8 +186,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "id_cabang": {
-          "name": "id_cabang",
+        "id_toko": {
+          "name": "id_toko",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -214,21 +195,53 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "t_pegawai_id_cabang_t_cabang_id_cabang_fk": {
-          "name": "t_pegawai_id_cabang_t_cabang_id_cabang_fk",
+        "t_pegawai_id_toko_t_toko_id_toko_fk": {
+          "name": "t_pegawai_id_toko_t_toko_id_toko_fk",
           "tableFrom": "t_pegawai",
-          "tableTo": "t_cabang",
+          "tableTo": "t_toko",
           "schemaTo": "public",
           "columnsFrom": [
-            "id_cabang"
+            "id_toko"
           ],
           "columnsTo": [
-            "id_cabang"
+            "id_toko"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.t_toko": {
+      "name": "t_toko",
+      "schema": "",
+      "columns": {
+        "id_toko": {
+          "name": "id_toko",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nama_toko": {
+          "name": "nama_toko",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kode_toko": {
+          "name": "kode_toko",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {},

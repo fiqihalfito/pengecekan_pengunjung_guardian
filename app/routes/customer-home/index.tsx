@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, redirect } from "react-router";
 import { CustomerSearch } from "./_components/customer-search";
 import { getCustomerDataByNoHP } from "./_services/service";
 import { Button } from "~/components/ui/button";
@@ -34,16 +34,17 @@ export async function loader({ request, params }: Route.ActionArgs) {
 
     // let formData = await request.formData();
     // let nohp = formData.get("nohp") as string;
-    const url = new URL(request.url);
-    const nohp = url.searchParams.get("nohp");
-    if (nohp) {
-        const customerRecord = await getCustomerDataByNoHP(nohp)
-        return { customerRecord, nohp }
-    }
+    return redirect("admin")
+    // const url = new URL(request.url);
+    // const nohp = url.searchParams.get("nohp");
+    // if (nohp) {
+    //     const customerRecord = await getCustomerDataByNoHP(nohp)
+    //     return { customerRecord, nohp }
+    // }
 
 
 
-    return { customerRecord: null, nohp }
+    // return { customerRecord: null, nohp }
 }
 
 export default function CustomerHome({ loaderData, actionData }: Route.ComponentProps) {
