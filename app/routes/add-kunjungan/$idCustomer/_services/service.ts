@@ -3,8 +3,8 @@ import { tCustomer, tCustomerCard } from "database/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-export async function getCustomerByNoHP(nohp: string) {
-    const res = await db.select().from(tCustomer).where(eq(tCustomer.nohp, nohp))
+export async function getCustomerById(idCustomer: string) {
+    const res = await db.select().from(tCustomer).where(eq(tCustomer.idCustomer, idCustomer))
     return res
 }
 

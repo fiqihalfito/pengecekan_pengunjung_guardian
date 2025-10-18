@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 export async function saveCustomer(customer: typeof tCustomer.$inferInsert) {
-    const res = await db.insert(tCustomer).values(customer).returning()
+    const res = await db.insert(tCustomer).values(customer).returning({ idCustomer: tCustomer.idCustomer })
     return res
 }
 
@@ -22,5 +22,9 @@ export const tCustomerInsertSchema = z.object({
 
     nohp: z
         .string()
-        .min(1, "Nomor telepon tidak boleh kosong")
+        .min(1, "Nomor telepon tidak boleh kosong"),
+
+    tglLahir: z.iso.date({
+        error: issue => issue.input === undefined ? "Required" : "wajib diisi"
+    })
 });

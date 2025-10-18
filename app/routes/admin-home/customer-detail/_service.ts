@@ -1,8 +1,15 @@
 import { db } from "database/connect";
 import { tCustomer, tCustomerCard } from "database/schema";
-import { desc, ilike, or } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
+import { validate as isUuid } from "uuid";
 
-export async function getCustomerDataBySearch(search: string) {
+
+export async function getCustomerDataById(idCustomer: string) {
+
+    if (!isUuid(idCustomer)) {
+        return []
+    }
+
     const res = await db.query.tCustomer.findMany({
         with: {
             customerCards: {
@@ -13,8 +20,7 @@ export async function getCustomerDataBySearch(search: string) {
                 orderBy: desc(tCustomerCard.tglKunjungan)
             },
         },
-        where: or(ilike(tCustomer.nohp, `%${search}%`), ilike(tCustomer.nama, `%${search}%`)),
+        where: eq(tCustomer.idCustomer, idCustomer),
     })
-
     return res
 }

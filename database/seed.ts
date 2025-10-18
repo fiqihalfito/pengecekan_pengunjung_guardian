@@ -6,65 +6,151 @@ import {
     tCustomer,
     tCustomerCard,
 } from "./schema";
+import { sql } from "drizzle-orm";
 
-async function seed() {
-    // Bersihkan tabel dulu (optional)
-    await db.delete(tCustomerCard);
-    await db.delete(tPegawai);
-    await db.delete(tCustomer);
-    await db.delete(tToko);
-
-    // ================== Toko ==================
-    const tokos = await db
-        .insert(tToko)
-        .values([
-            { namaToko: "Toko Jakarta" },
-            { namaToko: "Toko Bandung" },
-        ])
-        .returning();
-
-    // ================== Pegawai ==================
-    const pegawais = await db
-        .insert(tPegawai)
-        .values([
-            { nama: "Andi", idToko: tokos[0].idToko },
-            { nama: "Budi", idToko: tokos[0].idToko },
-            { nama: "Citra", idToko: tokos[1].idToko },
-        ])
-        .returning();
-
-    // ================== Customer ==================
-    const customers = await db
-        .insert(tCustomer)
-        .values([
-            { nama: "Rina", nohp: "0811111111", tglLahir: "1990-01-01" },
-            { nama: "Dedi", nohp: "0822222222", tglLahir: "1985-02-15" },
-            { nama: "Sari", nohp: "0833333333", tglLahir: "1992-03-20" },
-            { nama: "Fajar", nohp: "0844444444", tglLahir: "1995-04-10" },
-            { nama: "Maya", nohp: "0855555555", tglLahir: "1988-05-05" },
-        ])
-        .returning();
-
-    // ================== Customer Card (10 data) ==================
-    const cards: typeof tCustomerCard.$inferInsert[] = [
-        { tglKunjungan: "2025-09-01 09:00:00", gula: 120, kolesterol: 180, asamUrat: 6, hb: 14, idPegawai: pegawais[0].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[0].idCustomer },
-        { tglKunjungan: "2025-09-02 10:30:00", gula: 150, kolesterol: 200, asamUrat: 7, hb: 13, idPegawai: pegawais[1].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[1].idCustomer },
-        { tglKunjungan: "2025-09-03 11:15:00", gula: 110, kolesterol: 170, asamUrat: 5, hb: 15, idPegawai: pegawais[2].idPegawai, idToko: tokos[1].idToko, idCustomer: customers[2].idCustomer },
-        { tglKunjungan: "2025-09-04 09:45:00", gula: 130, kolesterol: 190, asamUrat: 8, hb: 12, idPegawai: pegawais[0].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[3].idCustomer },
-        { tglKunjungan: "2025-09-05 08:50:00", gula: 140, kolesterol: 210, asamUrat: 6, hb: 16, idPegawai: pegawais[1].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[4].idCustomer },
-        { tglKunjungan: "2025-09-06 14:20:00", gula: 125, kolesterol: 185, asamUrat: 7, hb: 14, idPegawai: pegawais[2].idPegawai, idToko: tokos[1].idToko, idCustomer: customers[0].idCustomer },
-        { tglKunjungan: "2025-09-07 15:00:00", gula: 135, kolesterol: 195, asamUrat: 5, hb: 13, idPegawai: pegawais[0].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[1].idCustomer },
-        { tglKunjungan: "2025-09-08 16:40:00", gula: 145, kolesterol: 205, asamUrat: 9, hb: 12, idPegawai: pegawais[1].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[2].idCustomer },
-        { tglKunjungan: "2025-09-09 10:10:00", gula: 155, kolesterol: 215, asamUrat: 6, hb: 15, idPegawai: pegawais[2].idPegawai, idToko: tokos[1].idToko, idCustomer: customers[3].idCustomer },
-        { tglKunjungan: "2025-09-10 09:30:00", gula: 160, kolesterol: 220, asamUrat: 8, hb: 14, idPegawai: pegawais[0].idPegawai, idToko: tokos[0].idToko, idCustomer: customers[4].idCustomer },
-    ];
-
-    await db.insert(tCustomerCard).values(cards);
-
-    console.log("✅ Seed selesai!");
+// ======================
+// Helper Functions
+// ======================
+function randomItem<T>(arr: T[]): T {
+    return arr[Math.floor(Math.random() * arr.length)];
 }
 
-seed().catch((err) => {
-    console.error(err);
-    process.exit(1);
+function daysAgo(days: number): string {
+    const date = new Date();
+    date.setDate(date.getDate() - days);
+    return date.toISOString();
+}
+
+function randomTokoId() {
+    const tokoIds = [
+        "0e8d8321-f497-40ab-9684-a8b59ad75f94",
+        "a0c7c3e1-181b-4e47-9e53-88652fce62e3",
+    ];
+    return randomItem(tokoIds);
+}
+
+// ======================
+// Main Seeder
+// ======================
+async function main() {
+    console.log("🌱 Mulai proses seeding...");
+
+    // 🔥 Kosongkan semua tabel
+    await db.execute(sql`
+    TRUNCATE TABLE 
+      t_customer_card,
+      t_customer,
+      t_pegawai,
+      t_toko
+    RESTART IDENTITY CASCADE;
+  `);
+    console.log("✅ Semua tabel dikosongkan");
+
+    // 1️⃣ Toko
+    const tokoData = [
+        {
+            idToko: "0e8d8321-f497-40ab-9684-a8b59ad75f94",
+            namaToko: "Toko Jakarta",
+            kodeToko: "3202",
+        },
+        {
+            idToko: "a0c7c3e1-181b-4e47-9e53-88652fce62e3",
+            namaToko: "Toko Bandung",
+            kodeToko: "6808",
+        },
+    ];
+    await db.insert(tToko).values(tokoData);
+    console.log("✅ Inserted 2 toko");
+
+    // 2️⃣ Pegawai
+    const pegawaiData = [
+        { idPegawai: "a603998e-cd9c-4080-ba2b-d16690cf8954", nama: "Adellena", idToko: randomTokoId() },
+        { nama: "Budi Santoso", idToko: randomTokoId() },
+        { nama: "Citra Lestari", idToko: randomTokoId() },
+    ];
+    const pegawaiResult = await db
+        .insert(tPegawai)
+        .values(pegawaiData)
+        .returning({
+            idPegawai: tPegawai.idPegawai,
+            idToko: tPegawai.idToko,
+            nama: tPegawai.nama,
+        });
+    console.table(pegawaiResult);
+    console.log("✅ Inserted 3 pegawai");
+
+    // 3️⃣ Customer
+    const customerData = [
+        {
+            nama: "Rina Kartika",
+            nohp: "081234567890",
+            tglLahir: "1995-04-15",
+            email: "rina.kartika@example.com",
+        },
+        {
+            nama: "Doni Prasetyo",
+            nohp: "082134567891",
+            tglLahir: "1988-09-22",
+            email: "doni.prasetyo@example.com",
+        },
+        {
+            nama: "Sari Melati",
+            nohp: "083134567892",
+            tglLahir: "1992-12-30",
+            email: "sari.melati@example.com",
+        },
+    ];
+    const customerResult = await db
+        .insert(tCustomer)
+        .values(customerData)
+        .returning({
+            idCustomer: tCustomer.idCustomer,
+            nama: tCustomer.nama,
+        });
+    console.table(customerResult);
+    console.log("✅ Inserted 3 customer");
+
+    // 4️⃣ Customer Card
+    const readings = [
+        { gula: 98.2, kolesterol: 180.4, asamUrat: 5.8, hb: 13.6 },
+        { gula: 105.3, kolesterol: 190.1, asamUrat: 6.1, hb: 14.0 },
+        { gula: 111.5, kolesterol: 175.2, asamUrat: 6.8, hb: 12.9 },
+        { gula: 123.9, kolesterol: 200.8, asamUrat: 7.0, hb: 13.3 },
+        { gula: 115.7, kolesterol: 185.3, asamUrat: 5.9, hb: 14.5 },
+        { gula: 128.1, kolesterol: 210.5, asamUrat: 7.5, hb: 12.7 },
+        { gula: 102.4, kolesterol: 170.6, asamUrat: 6.0, hb: 13.9 },
+        { gula: 99.8, kolesterol: 192.2, asamUrat: 6.2, hb: 14.1 },
+        { gula: 108.6, kolesterol: 178.5, asamUrat: 6.4, hb: 13.2 },
+        { gula: 134.2, kolesterol: 220.1, asamUrat: 7.2, hb: 12.4 },
+        { gula: 96.1, kolesterol: 165.9, asamUrat: 5.5, hb: 14.3 },
+        { gula: 125.7, kolesterol: 205.2, asamUrat: 7.1, hb: 13.1 },
+        { gula: 118.3, kolesterol: 199.0, asamUrat: 6.7, hb: 13.8 },
+        { gula: 140.4, kolesterol: 230.4, asamUrat: 7.6, hb: 12.2 },
+        { gula: 109.9, kolesterol: 183.3, asamUrat: 6.3, hb: 13.5 },
+    ];
+
+    const cardData = readings.map((r, i) => {
+        const peg = randomItem(pegawaiResult);
+        const cus = randomItem(customerResult);
+        return {
+            tglKunjungan: daysAgo(i),
+            gula: r.gula,
+            kolesterol: r.kolesterol,
+            asamUrat: r.asamUrat,
+            hb: r.hb,
+            idPegawai: peg.idPegawai,
+            idToko: peg.idToko,
+            idCustomer: cus.idCustomer,
+        };
+    });
+
+    await db.insert(tCustomerCard).values(cardData);
+    console.log(`✅ Inserted ${cardData.length} customer card`);
+
+    console.log("🌿 Seeding selesai tanpa error!");
+}
+
+// Jalankan seeder
+main().catch((err) => {
+    console.error("❌ Error saat seeding:", err);
 });

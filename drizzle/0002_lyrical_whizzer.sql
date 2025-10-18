@@ -1,0 +1,1 @@
+ALTER TABLE "t_toko" ADD COLUMN "kode_toko" text;

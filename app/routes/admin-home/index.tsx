@@ -1,10 +1,10 @@
 import { Link } from "react-router";
-import { CustomerSearch } from "./_components/customer-search";
-import { getCustomerDataByNoHP } from "./_services/service";
+import { CustomerSearch } from "../customer-home/_components/customer-search";
+import { getCustomerDataBySearch } from "./_services/service";
 import { Button } from "~/components/ui/button";
 import { CalendarPlus2Icon, SmilePlusIcon } from "lucide-react";
 import type { Route } from "./+types/index";
-import { useEffect } from "react";
+import z from "zod";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -13,52 +13,54 @@ export function meta({ }: Route.MetaArgs) {
   ];
 }
 
-// export async function action({ request, params }: Route.ActionArgs) {
+export async function action({ request, params }: Route.ActionArgs) {
 
-//   // clear semua search params
-//   const url = new URL(request.url);
-//   url.searchParams.delete("nohp")
-//   // url.search = "";
-//   console.log(url);
-
-
-//   let formData = await request.formData();
-//   let nohp = formData.get("nohp") as string;
-//   const customerRecord = await getCustomerDataByNoHP(nohp)
+  // clear semua search params
+  // const url = new URL(request.url);
+  // url.searchParams.delete("nohp")
+  // // url.search = "";
+  // console.log(url);
 
 
-//   return { customerRecord }
-// }
-export async function loader({ request, params }: Route.ActionArgs) {
+  let formData = await request.formData();
+  let search = formData.get("search") as string;
+  const validated = z.string().min(1, "Wajib diisi").safeParse(search)
 
 
-  // let formData = await request.formData();
-  // let nohp = formData.get("nohp") as string;
-  const url = new URL(request.url);
-  const nohp = url.searchParams.get("nohp");
-  if (nohp) {
-    const customerRecord = await getCustomerDataByNoHP(nohp)
-    return { customerRecord, nohp }
+  if (!validated.success) {
+
+    return { error: z.flattenError(validated.error).formErrors[0] }
   }
+  const customerData = await getCustomerDataBySearch(search)
 
 
-
-  return { customerRecord: null, nohp }
+  return { customerData }
 }
+// export async function loader({ request, params }: Route.ActionArgs) {
+
+
+//   // let formData = await request.formData();
+//   // let nohp = formData.get("nohp") as string;
+//   const url = new URL(request.url);
+//   const search = url.searchParams.get("search");
+//   if (search) {
+//     const customerRecord = await getCustomerDataBySearch(search)
+//     return { customerRecord, search }
+//   }
+
+
+
+//   return { customerRecord: null, search }
+// }
 
 export default function AdminHome({ loaderData, actionData }: Route.ComponentProps) {
 
   // const customerRecord = actionData?.customerRecord
   // console.log("customerRecord", customerRecord);
-  const { customerRecord, nohp } = loaderData
+  // const { customerRecord, search } = loaderData
 
 
-  useEffect(() => {
-    const searchField = document.getElementById("nohp");
-    if (searchField instanceof HTMLInputElement) {
-      searchField.value = nohp || "";
-    }
-  }, [nohp]);
+
 
 
   return (
@@ -71,13 +73,13 @@ export default function AdminHome({ loaderData, actionData }: Route.ComponentPro
               Cari dan lihat informasi lengkap customer berdasarkan nomor telepon
             </p>
           </div>
-          <div className="mb-3 flex justify-between items-center">
-            <Link to={'/admin/addKunjungan'}>
+          <div className="mb-3 flex justify-end items-center">
+            {/* <Link to={'/admin/addKunjungan'}>
               <Button className="cursor-pointer">
                 <CalendarPlus2Icon className="" />
                 Tambah Kunjungan
               </Button>
-            </Link>
+            </Link> */}
 
             <div className="flex items-center gap-x-2">
               <span className="text-muted-foreground font-medium text-sm">Tidak menemukan customer ?</span>
@@ -89,7 +91,7 @@ export default function AdminHome({ loaderData, actionData }: Route.ComponentPro
               </Link>
             </div>
           </div>
-          <CustomerSearch customerLoader={customerRecord} nohp={nohp} />
+          <CustomerSearch />
         </div>
       </div>
     </main>

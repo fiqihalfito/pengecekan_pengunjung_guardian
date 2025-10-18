@@ -53,13 +53,6 @@ export default function CustomerHome({ loaderData, actionData }: Route.Component
     const { customerRecord, nohp } = loaderData
 
 
-    useEffect(() => {
-        const searchField = document.getElementById("nohp");
-        if (searchField instanceof HTMLInputElement) {
-            searchField.value = nohp || "";
-        }
-    }, [nohp]);
-
 
     return (
         <main className="min-h-screen bg-background">
@@ -74,7 +67,7 @@ export default function CustomerHome({ loaderData, actionData }: Route.Component
                         </p>
                     </div>
 
-                    <CustomerSearch customerLoader={customerRecord} nohp={nohp} />
+                    <CustomerSearch />
                 </div>
             </div>
         </main>

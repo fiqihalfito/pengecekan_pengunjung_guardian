@@ -1,0 +1,259 @@
+{
+  "id": "b0159c60-4768-4cdf-a89e-95adfab6cccc",
+  "prevId": "6525fa8a-5030-4c9e-a082-958fc761d307",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.t_customer": {
+      "name": "t_customer",
+      "schema": "",
+      "columns": {
+        "id_customer": {
+          "name": "id_customer",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nama": {
+          "name": "nama",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nohp": {
+          "name": "nohp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tgl_lahir": {
+          "name": "tgl_lahir",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'contoh_email@gmail.com'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "t_customer_nohp_unique": {
+          "name": "t_customer_nohp_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "nohp"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.t_customer_card": {
+      "name": "t_customer_card",
+      "schema": "",
+      "columns": {
+        "id_customer_card": {
+          "name": "id_customer_card",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tgl_kunjungan": {
+          "name": "tgl_kunjungan",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "gula": {
+          "name": "gula",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kolesterol": {
+          "name": "kolesterol",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "asam_urat": {
+          "name": "asam_urat",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hb": {
+          "name": "hb",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_pegawai": {
+          "name": "id_pegawai",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_toko": {
+          "name": "id_toko",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_customer": {
+          "name": "id_customer",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "t_customer_card_id_pegawai_t_pegawai_id_pegawai_fk": {
+          "name": "t_customer_card_id_pegawai_t_pegawai_id_pegawai_fk",
+          "tableFrom": "t_customer_card",
+          "tableTo": "t_pegawai",
+          "columnsFrom": [
+            "id_pegawai"
+          ],
+          "columnsTo": [
+            "id_pegawai"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "t_customer_card_id_toko_t_toko_id_toko_fk": {
+          "name": "t_customer_card_id_toko_t_toko_id_toko_fk",
+          "tableFrom": "t_customer_card",
+          "tableTo": "t_toko",
+          "columnsFrom": [
+            "id_toko"
+          ],
+          "columnsTo": [
+            "id_toko"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "t_customer_card_id_customer_t_customer_id_customer_fk": {
+          "name": "t_customer_card_id_customer_t_customer_id_customer_fk",
+          "tableFrom": "t_customer_card",
+          "tableTo": "t_customer",
+          "columnsFrom": [
+            "id_customer"
+          ],
+          "columnsTo": [
+            "id_customer"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.t_pegawai": {
+      "name": "t_pegawai",
+      "schema": "",
+      "columns": {
+        "id_pegawai": {
+          "name": "id_pegawai",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nama": {
+          "name": "nama",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_toko": {
+          "name": "id_toko",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "t_pegawai_id_toko_t_toko_id_toko_fk": {
+          "name": "t_pegawai_id_toko_t_toko_id_toko_fk",
+          "tableFrom": "t_pegawai",
+          "tableTo": "t_toko",
+          "columnsFrom": [
+            "id_toko"
+          ],
+          "columnsTo": [
+            "id_toko"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.t_toko": {
+      "name": "t_toko",
+      "schema": "",
+      "columns": {
+        "id_toko": {
+          "name": "id_toko",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nama_toko": {
+          "name": "nama_toko",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kode_toko": {
+          "name": "kode_toko",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

@@ -1,5 +1,5 @@
 import type { Route } from "./+types/index"
-import { getCustomerByNoHP, saveKunjungan, tCustomerCardInsertSchema } from "./_services/service"
+import { getCustomerById, saveKunjungan, tCustomerCardInsertSchema } from "./_services/service"
 import {
     CalendarCheckIcon,
     CalendarPlusIcon,
@@ -15,7 +15,7 @@ import type { tCustomerCard } from "database/schema"
 
 export async function loader({ request, params }: Route.LoaderArgs) {
 
-    const customer = await getCustomerByNoHP(params.nohp)
+    const customer = await getCustomerById(params.idCustomer)
     if (customer.length === 0) {
         throw new Error("customer not found")
     }
@@ -40,19 +40,19 @@ export async function action({ request, params }: Route.ActionArgs) {
         return { errors: flattened.fieldErrors }
     }
 
-    const customer = await getCustomerByNoHP(params.nohp)
+    const customer = await getCustomerById(params.idCustomer)
 
     const newDataKunjungan: typeof tCustomerCard.$inferInsert = {
         ...cleaned,
         idCustomer: customer[0].idCustomer,
-        idPegawai: "c6354877-c3fe-490c-ad56-d64cd3ba8574",
+        idPegawai: "a603998e-cd9c-4080-ba2b-d16690cf8954",
         idToko: "0e8d8321-f497-40ab-9684-a8b59ad75f94",
     }
 
     const res = await saveKunjungan(newDataKunjungan)
 
 
-    return redirect(`/admin?nohp=${params.nohp}`)
+    return redirect(`/admin/customer/${params.idCustomer}`)
 }
 
 type FormField = 'gula' | 'kolesterol' | 'asamUrat' | 'hb'
@@ -77,7 +77,7 @@ export default function addKunjunganInsert({ params, loaderData }: Route.Compone
                             Tambahkan riwayat kunjungan customer
                         </p>
                     </div>
-                    <Link to={`/admin`}>
+                    <Link to={`/admin/customer/${params.idCustomer}`} >
                         <Button className="mb-2" size={"sm"}>
                             <ChevronLeftIcon />
                             Kembali
